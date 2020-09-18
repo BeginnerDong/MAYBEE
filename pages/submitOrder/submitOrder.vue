@@ -3,9 +3,13 @@
 		
 		<view class="bg-white radius10 overflow-h my-2 mx-25 px-3 py-4 flex1 p-r"
 		@click="Router.navigateTo({route:{path:'/pages/address/address'}})">
-			<view class="flex-1 pr-5 line-h address">
+			<!-- <view class="flex-1 pr-5 line-h address">
 				<view class="font-30 font-w avoidOverflow">陕西省西安市雁塔区科技路高新大都荟2007</view>
 				<view class="font-26 pt-3 color6">张梦瑶 <text class="pl-4">18228933365</text></view>
+			</view> -->
+			<view class="flex-1 flex">
+				<image src="../../static/images/theorder-icon.png" class="wh32 mr-1"></image>
+				<view class="font-30">添加收获地址</view>
 			</view>
 			<image src="../../static/images/address-icon4.png" class="R-icon m-2"></image>
 			<image src="../../static/images/theorder-icon1.png" mode="widthFix" class="p-aX bottom-0"></image>

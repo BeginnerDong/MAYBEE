@@ -1,38 +1,42 @@
 <template>
 	<view>
 		
-		<view class="p-r top flex0 bg-white">
-			<image src="../../static/images/my-icon.png" mode="widthFix" class="p-aX top-0"></image>
-			<view class="flex4">
-				<view class="wh160 shadow flex0 radius-5 p-r z10 user">
-					<image src="../../static/images/my-img1.png" class="wh140 radius-5"></image>
+		<view class="p-s top-0 z100">
+			<view class="p-r top flex0 bg-white">
+				<image src="../../static/images/my-icon.png" mode="widthFix" class="p-aX top-0"></image>
+				<view class="flex4">
+					<view class="wh160 shadow flex0 radius-5 p-r z10 user">
+						<image src="../../static/images/my-img1.png" class="wh140 radius-5"></image>
+					</view>
+					<view class="font-32 line-h pt-2 font-w">竹蜻蜓</view>
 				</view>
-				<view class="font-32 line-h pt-2 font-w">竹蜻蜓</view>
+			</view>
+			
+			<view class="font-26 flex2 py-5 line-h bg-white">
+				<view class="flex4"
+				@click="Router.navigateTo({route:{path:'/pages/address/address'}})">
+					<image src="../../static/images/my-icon2.png" class="icon1 mb-2"></image>
+					<view>地址管理</view>
+				</view>
+				<view class="flex4"
+				@click="Router.navigateTo({route:{path:'/pages/refundOrder/refundOrder'}})">
+					<image src="../../static/images/my-icon1.png" class="icon2 mb-2"></image>
+					<view>退款订单</view>
+				</view>
+			</view>
+			
+			<view class="bg-white mx-25 shadow">
+				<view class="flexX list p-s top-0 z10 bg-f2">
+					<view class="li" :class="liCurr==0?'on':''" @click="changeLi(0)">全部</view>
+					<view class="li" :class="liCurr==1?'on':''" @click="changeLi(1)">代付款</view>
+					<view class="li" :class="liCurr==2?'on':''" @click="changeLi(2)">待发货</view>
+					<view class="li" :class="liCurr==3?'on':''" @click="changeLi(3)">待收货</view>
+					<view class="li" :class="liCurr==4?'on':''" @click="changeLi(4)">已完成</view>
+				</view>
 			</view>
 		</view>
 		
-		<view class="font-26 flex2 py-5 line-h bg-white">
-			<view class="flex4">
-				<image src="../../static/images/my-icon2.png" class="icon1 mb-2"></image>
-				<view>地址管理</view>
-			</view>
-			<view class="flex4">
-				<image src="../../static/images/my-icon1.png" class="icon2 mb-2"></image>
-				<view>退款订单</view>
-			</view>
-		</view>
-		
-		<view class="bg-white mx-25 shadow">
-			<view class="flexX list p-s top-0 z10 bg-f2">
-				<view class="li" :class="liCurr==0?'on':''" @click="changeLi(0)">全部</view>
-				<view class="li" :class="liCurr==1?'on':''" @click="changeLi(1)">时令鲜果</view>
-				<view class="li" :class="liCurr==2?'on':''" @click="changeLi(2)">美妆护肤</view>
-				<view class="li" :class="liCurr==3?'on':''" @click="changeLi(3)">服饰箱包</view>
-				<view class="li" :class="liCurr==4?'on':''" @click="changeLi(4)">食品饮水</view>
-			</view>
-		</view>
-		
-		<view class="bg-white mx-25 radius10 px-2 mt-2">
+		<view class="bg-white mx-25 radius10 px-2 mt-2" v-for="v in 5" :key="v">
 			<view class="font-24 flex1 py-3">
 				<image src="../../static/images/my-icon3.png" class="wh28"></image>
 				<view class="flex-1 pl-1">2020.07.30 11:00:34</view>

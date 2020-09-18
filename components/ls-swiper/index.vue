@@ -27,7 +27,7 @@
 			// 轮播图片key
 			imgKey: {
 				type: String,
-				required: true
+				required: false
 			},
 			// 高度
 			height: {
@@ -153,14 +153,14 @@
 		.dots {
 			display: flex;
 			position: absolute;
-			left: 50%;
+			left: 5%;
 			transform: translateX(-50%);
 
 			.dot {
 				width: 8rpx;
 				height: 8rpx;
 				border-radius: 50%;
-				background-color: #fff;
+				background-color: #f7f7f7;
 				margin-right: 8rpx;
 			}
 
@@ -168,7 +168,7 @@
 				height: 8rpx;
 				width: 22rpx;
 				border-radius: 4rpx;
-				background-color: #FF633A;
+				background-color: #EEC337;
 			}
 		}
 

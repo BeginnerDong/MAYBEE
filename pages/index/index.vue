@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- banner -->
-		<view class="banner">
+		<!-- <view class="banner">
 			<swiper class="swiper-box" indicator-dots="indicatorDots" autoplay="autoplay" interval="3000" indicator-active-color="#E6B968">
 				<block>
 					<swiper-item class="swiper-item" >
@@ -9,12 +9,12 @@
 					</swiper-item>
 				</block>
 			</swiper>
-		</view>
+		</view> -->
 		
 		<!-- banner -->
-		<!-- <container>
-			<ls-swiper :list="sliderData" imgKey="imgUrl" :loop="true" :dots='true' :autoplay='true' height='125' imgRadius='10' imgWidth='355'/>
-		</container> -->
+		<container>
+			<ls-swiper :list="sliderData"  :loop="true" :dots='true' :autoplay='true' height='140' imgRadius='10' imgWidth='355'/>
+		</container>
 		
 		<!-- 金刚区 -->
 		<view class="box font-24 color8 line-h py-3 p-r">
@@ -49,7 +49,22 @@
 				</block>
 				<block>
 					<swiper-item class="swiper-item" >
-						<image src="../../static/images/home-banner.png" mode="widthFix" />
+						<view class="flex">
+							<view class="flex4 boxItem"
+							@click="Router.redirectTo({route:{path:'/pages/classify/classify'}})">
+								<image src="../../static/images/home-icon.png" class="mb-2"></image>
+								<view>时令鲜果</view>
+							</view>
+							<view class="flex4 boxItem"
+							@click="Router.redirectTo({route:{path:'/pages/classify/classify'}})">
+								<image src="../../static/images/home-icon2.png" class="mb-2"></image>
+								<view>美妆护肤</view>
+							</view>
+							<view class="flex4 boxItem">
+								<image src="../../static/images/home-icon3.png" class="mb-2"></image>
+								<view>服饰箱包</view>
+							</view>
+						</view>
 					</swiper-item>
 				</block>
 			</swiper>
@@ -120,9 +135,13 @@
 			return {
 				Router:this.$Router,
 				is_show: true,
-				sliderData: ['https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1893203566,3929386202&fm=26&gp=0.jpg'],
+				sliderData: ['../../static/images/home-banner.png','../../static/images/home-banner.png'],
 				current:0
 			}
+		},
+		components:{
+			container,
+			LsSwiper
 		},
 		onLoad() {
 			const self = this;
@@ -154,7 +173,7 @@
 <style>page{background-color: #f2f2f2;}</style>
 <style scoped>
 .banner swiper,.banner swiper-item{width: 700rpx;height: 280rpx;margin: 0 auto;}
-.box .boxItem{}
+.box .boxItem{width: 20%;}
 .box .boxItem image{width: 94rpx;height: 94rpx;border-radius: 50%;}
 .box swiper,.box swiper-item{width: 670rpx;height: 140rpx;margin: 0 auto;}
 

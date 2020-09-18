@@ -75,6 +75,13 @@
 				"navigationBarBackgroundColor": "#EEC337"
 			}
         }
+        ,{
+            "path" : "pages/refundOrder/refundOrder",
+            "style" : {
+				"navigationBarTitleText": "退款订单",
+				"navigationBarBackgroundColor": "#fff"
+			}
+        }
     ],
 	"globalStyle": {
 		//"navigationStyle":"custom",
