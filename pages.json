@@ -1,0 +1,93 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",//设置页面标题文字
+				"onReachBottomDistance":100,
+				"navigationBarBackgroundColor": "#f2f2f2"
+			}
+		}
+        ,{
+            "path" : "pages/detail/detail",
+            "style" : {
+				"navigationBarTitleText": "商品详情"
+			}
+        }
+        ,{
+            "path" : "pages/classify/classify",
+            "style" : {
+				"navigationBarTitleText": "商品列表"
+			}
+        }
+        ,{
+            "path" : "pages/address/address",
+            "style" : {
+				"navigationBarTitleText": "地址管理",
+				"navigationBarBackgroundColor": "#fff"
+			}
+        }
+        ,{
+            "path" : "pages/addAddress/addAddress",
+            "style" : {
+				"navigationBarTitleText": "新增地址",
+				"navigationBarBackgroundColor": "#fff"
+			}
+        }
+        ,{
+            "path" : "pages/submitOrder/submitOrder",
+            "style" : {
+				"navigationBarTitleText": "提交订单",
+				"navigationBarBackgroundColor": "#EEC337"
+			}
+        }
+        ,{
+            "path" : "pages/applyRefund/applyRefund",
+            "style" : {
+				"navigationBarTitleText": "申请退款",
+				"navigationBarBackgroundColor": "#EEC337"
+			}
+        }
+        ,{
+            "path" : "pages/car/car",
+            "style" : {
+				"navigationBarTitleText": "购物车"
+			}
+        }
+        ,{
+            "path" : "pages/editAddress/editAddress",
+            "style" : {
+				"navigationBarTitleText": "编辑地址",
+				"navigationBarBackgroundColor": "#fff"
+			}
+        }
+        ,{
+            "path" : "pages/user/user",
+            "style" : {
+				"navigationBarTitleText": "我的",
+				"navigationBarBackgroundColor": "#EEC337"
+			}
+        }
+        ,{
+            "path" : "pages/orderDetail/orderDetail",
+            "style" : {
+				"navigationBarTitleText": "订单详情",
+				"navigationBarBackgroundColor": "#EEC337"
+			}
+        }
+    ],
+	"globalStyle": {
+		//"navigationStyle":"custom",
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "",
+		"navigationBarBackgroundColor": "#f2f2f2"
+	},
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [{
+			"name": "", //模式名称
+			"path": "", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
+	}
+}
