@@ -1,5 +1,5 @@
 {
-    "name" : "uni-one",
+    "name" : "Maybee",
     "appid" : "",
     "description" : "",
     "versionName" : "1.0.0",
@@ -55,7 +55,7 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 小程序特有相关 */
-        "appid" : "wx955e9810d0cbd494",
+        "appid" : "wx0fa31d8f914ffe9e",
         "setting" : {
             "urlCheck" : false,
             "es6" : true,

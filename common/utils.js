@@ -1,45 +1,235 @@
 import assetsConfig from "@/config/assets.config.js";
-
+import token from '@/common/token.js';
+var QQMapWX = require('./qqmap-wx-jssdk.min.js');
+var wxMap = new QQMapWX({
+	key: '4BEBZ-ZM43U-U6SVY-BZ5X3-44T35-4ZFD6' // 必填
+});
 export default {
 	
-	
+	getLocation(type, callback) {
+		wx.getSetting({
+			success: (res) => {
+				if (res.authSetting['scope.userLocation'] != undefined && res.authSetting['scope.userLocation'] != true) { //非初始化进入该页面,且未授权
+					callback&&callback(res)
+				} else if (res.authSetting['scope.userLocation'] == undefined) { //初始化进入
+					wx.getLocation({
+					  type: 'gcj02',
+					  success: function (res) {
+					    var latitude = res.latitude
+					    var longitude = res.longitude
+					    
+					    if(type=='getGeocoder'){
+					        callback&&callback(res)
+					        return;
+					    };
+					    if(type=='reverseGeocoder'){
+					        wxMap.reverseGeocoder({
+					          location: {
+					            latitude: latitude,
+					            longitude: longitude
+					          },
+					          success: function (res) {
+					            callback&&callback(res.result)
+					          },
+					          fail(res){
+					            wx.showToast({
+					                title:'获取位置失败',
+					                icon:'none',
+					                duration:2000,
+					                mask:true,
+					            });
+					          }
+					        });  
+					    }
+					  },
+					  fail(res) {
+					    wx.showToast({
+					        title:'获取经纬度失败',
+					        icon:'none',
+					        duration:2000,
+					        mask:true,
+					    }); 
+					  }
+					})
+				} else { //授权后默认加载
+					wx.getLocation({
+					  type: 'gcj02',
+					  success: function (res) {
+						  console.log('ok')
+					    var latitude = res.latitude
+					    var longitude = res.longitude
+						/* var latitude = 33.0678400000
+						var longitude = 107.0319400000 */
+					    if(type=='getGeocoder'){
+					        callback&&callback(res)
+					        return;
+					    };
+					    if(type=='reverseGeocoder'){
+					        wxMap.reverseGeocoder({
+					          location: {
+					            latitude: latitude,
+					            longitude: longitude
+					          },
+					          success: function (res) {
+					            callback&&callback(res.result)
+					          },
+					          fail(res){
+					            wx.showToast({
+					                title:'获取位置失败',
+					                icon:'none',
+					                duration:2000,
+					                mask:true,
+					            });
+					          }
+					        });  
+					    }
+					  },
+					  fail(res) {
+						  console.log('fail',res)
+						  
+						var latitude = 34.180351
+						var longitude = 108.939529
+						if(type=='getGeocoder'){
+						    callback&&callback(res)
+						    return;
+						};
+						if(type=='reverseGeocoder'){
+						    wxMap.reverseGeocoder({
+						      location: {
+						        latitude: latitude,
+						        longitude: longitude
+						      },
+						      success: function (res) {
+						        callback&&callback(res.result)
+						      },
+						      fail(res){
+						        wx.showToast({
+						            title:'获取位置失败',
+						            icon:'none',
+						            duration:2000,
+						            mask:true,
+						        });
+						      }
+						    });  
+						}
+						
+						  
+					    wx.showToast({
+					        title:'获取经纬度失败',
+					        icon:'none',
+					        duration:2000,
+					        mask:true,
+					    }); 
+					  }
+					})
+				}
+			}
+		})
+	},
 
 	realPay(param, callback) {
-	
-		function onBridgeReady(param) {
-			WeixinJSBridge.invoke(
-				'getBrandWCPayRequest', {
-					"appId": "wx7db54ed176405e24", //公众号名称，由商户传入     
-					'timeStamp': param.timeStamp,
-					'nonceStr': param.nonceStr,
-					'package': param.package,
-					'signType': param.signType,
-					'paySign': param.paySign,
-				},
-				function(res) {
-	
-					if (res.err_msg == "get_brand_wcpay_request:ok") {
-						// 使用以上方式判断前端返回,微信团队郑重提示：
-						//res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-						callback && callback(1);
-					} else {
-/* 						alert(JSON.stringify(res));
-						alert(res.err_msg); */
-						callback && callback(0);
-					}
+		uni.requestPayment({
+			provider: 'wxpay',
+			'timeStamp': param.timeStamp,
+			'nonceStr': param.nonceStr,
+			'package': param.package,
+			'signType': param.signType,
+			'paySign': param.paySign,
+			success: function(res) {
+				console.log(res);
+				wx.showToast({
+					title: '支付成功',
+					icon: 'none',
+					duration: 1000,
+					mask: true
 				});
-		}
-		if (typeof WeixinJSBridge == "undefined") {
-			if (document.addEventListener) {
-				document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-			} else if (document.attachEvent) {
-				document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-				document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-			}
-		} else {
-			onBridgeReady(param);
-		}
 	
+				callback && callback(1);
+			},
+			fail: function(res) {
+				console.log(res);
+				wx.showToast({
+					title: '支付失败',
+					icon: 'none',
+					duration: 1000,
+					mask: true
+				});
+				callback && callback(0);
+			}
+		});
+	},
+	
+	getAuthSetting(callback) {
+		wx.getSetting({
+			success: setting => {
+				if (!setting.authSetting['scope.userInfo']) {
+					wx.hideLoading();
+					uni.setStorageSync('canClick', true);
+					this.showToast('授权请点击同意', 'none');
+				} else {
+					uni.getUserInfo({
+						provider: 'weixin',
+						success: function(infoRes) {
+							console.log('-------获取微信用户所有-----');
+							console.log(JSON.stringify(infoRes.userInfo));
+							callback && callback(infoRes.userInfo, setting);
+						}
+					});
+	
+					/* wx.getUserInfo({
+						success: function(user) {
+							
+						}
+					}); */
+				};
+			}
+		});
+	},
+	
+	uploadFile(filePath, name, formData, callback) {
+		var that = this;
+		const c_callback = (res) => {
+			that.uploadFile(filePath, name, formData, callback);
+		};
+		console.log('uploadFile', formData)
+		if (formData.tokenFuncName) {
+			if (formData.refreshTokn) {
+				token[formData.tokenFuncName](c_callback, {
+					refreshToken: true
+				});
+			} else {
+				formData.token = token[formData.tokenFuncName](c_callback);
+			};
+			if (!formData.token) {
+				return;
+			};
+		};
+		wx.uploadFile({
+			url: 'https://maybee.daqinyujing.com/api/public/index.php/api/v1/Base/FtpFile/upload',
+			filePath: filePath,
+			name: name,
+			formData: formData,
+			success: function(res) {
+				if (res.data) {
+					res.data = JSON.parse(res.data);
+				};
+				if (res.data.solely_code == '200000') {
+					token[formData.tokenFuncName](c_callback, {
+						refreshToken: true
+					});
+				} else {
+					callback && callback(res.data);
+				};
+			},
+			fail: function(err) {
+				wx.showToast({
+					title: '网络故障',
+					icon: 'fail',
+					duration: 2000,
+					mask: true,
+				});
+			}
+		})
 	},
 	
 	getHashParameters() {
@@ -667,17 +857,29 @@ export default {
 		var seperator1 = "-";
 		var seperator2 = ":";
 		var date = parseInt(date);
-		
-		
+	
+	
 		var date = new Date(date);
-		
+	
 		var month = date.getMonth() + 1;
 		var strDate = date.getDate();
+		var hour = date.getHours();
+		var min = date.getMinutes();
+		var sec = date.getSeconds();
 		if (month >= 1 && month <= 9) {
 			month = "0" + month;
 		}
 		if (strDate >= 0 && strDate <= 9) {
 			strDate = "0" + strDate;
+		}
+		if (hour >= 0 && hour <= 9) {
+			hour = "0" + hour;
+		}
+		if (min >= 0 && min <= 9) {
+			min = "0" + min;
+		}
+		if (sec >= 0 && sec <= 9) {
+			sec = "0" + sec;
 		}
 		if (type == "ym") {
 			// 转年月
@@ -688,13 +890,13 @@ export default {
 		} else if (type == "ymd-hms") {
 			//转年月日 时分秒
 			var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate +
-				" " + date.getHours() + seperator2 + date.getMinutes() +
-				seperator2 + date.getSeconds();
+				" " + hour + seperator2 + min +
+				seperator2 + sec;
 		} else if (type == "hms") {
 			//转时分秒
-			var currentdate = date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds();
+			var currentdate = hour + seperator2 + min + seperator2 + sec;
 		}
 		return currentdate;
-	}
+	},
 
 }

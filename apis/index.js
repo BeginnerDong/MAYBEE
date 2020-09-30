@@ -4,7 +4,18 @@ import config from "@/config/index.config.js";
 
 export default {
 
-
+	getQrCode(param, callback) {
+		var allParams = {
+			url: 'Base/Qr/ProgramQrGet',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
 	WxJssdk(param, callback) {
 
 		var allParams = {
@@ -136,6 +147,32 @@ export default {
 		};
 		http.HTTP(allParams);
 	},
+	
+	messageAdd(param, callback) {
+		var allParams = {
+			url: 'Common/Message/add',
+			type: 'post',
+			noToken: true,
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	messageGet(param, callback) {
+		var allParams = {
+			url: 'Common/Message/get',
+			type: 'post',
+			noToken: true,
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
 
 	labelGet(param, callback) {
 		var allParams = {
@@ -188,6 +225,19 @@ export default {
 		};
 		http.HTTP(allParams);
 	},
+	
+	commonUserGet(param, callback) {
+		var allParams = {
+			url: 'Common/User/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
 	userUpdate(param, callback) {
 		var allParams = {
 			url: 'Base/User/update',
@@ -329,6 +379,45 @@ export default {
 		};
 		http.HTTP(allParams);
 	},
+	
+	driverLogin(param, callback) {
+	
+		var allParams = {
+			url: 'Func/Common/loginByDriver',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	areaLogin(param, callback) {
+	
+		var allParams = {
+			url: 'Func/Common/loginByArea',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	agentLogin(param, callback) {
+	
+		var allParams = {
+			url: 'Func/Common/loginByAgent',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
 
 	wechatGet(param, callback) {
 		var allParams = {
@@ -405,6 +494,30 @@ export default {
 	userCouponGet(param, callback) {
 		var allParams = {
 			url: 'Common/UserCoupon/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	couponGet(param, callback) {
+		var allParams = {
+			url: 'Common/Coupon/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	couponAdd(param, callback) {
+		var allParams = {
+			url: 'Func/Coupon/addCoupon',
 			type: 'post',
 			data: param,
 			sCallback: function(data) {

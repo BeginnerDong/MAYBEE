@@ -2,20 +2,24 @@
 	<view>
 		
 		<view class="flexX navBox p-s top-0 z10 bg-f2">
-			<view class="nav" :class="navCurr==0?'on':''" @click="changeNav(0)">全部</view>
-			<view class="nav" :class="navCurr==1?'on':''" @click="changeNav(1)">时令鲜果</view>
-			<view class="nav" :class="navCurr==2?'on':''" @click="changeNav(2)">美妆护肤</view>
-			<view class="nav" :class="navCurr==3?'on':''" @click="changeNav(3)">服饰箱包</view>
-			<view class="nav" :class="navCurr==4?'on':''" @click="changeNav(4)">食品饮水</view>
+			<view class="nav" :class="curr==-1?'on':''" @click="change(-1)">全部</view>
+			<view class="nav" @click="change(index)"
+			:class="curr==index?'on':''" 
+			v-for="(item,index) in labelData" :key="index">{{item.title}}</view>
 		</view>
 		
-		<view class="flex1 flex-wrap line-h mx-25 pb-3"
-		@click="Router.redirectTo({route:{path:'/pages/detail/detail'}})">
-			<view class="bg-white radius10 overflow-h mt-2 good" v-for="v in 5" :kry="v">
-				<image src="../../static/images/classfication-img.png" class="img"></image>
+		<view class="flex1 flex-wrap line-h mx-25 pb-3">
+		
+			<view  class="bg-white radius10 overflow-h mt-2 good" 
+				v-for="(item,index) in mainData" 
+				:key="index" 
+				:data-id="item.id"
+				@click="Router.navigateTo({route:{path:'/pages/detail/detail?id='+$event.currentTarget.dataset.id}})"
+			>
+				<image :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" class="img"></image>
 				<view class="p-2">
-					<view class="avoidOverflow pb-2">福建红心柚子 红肉香甜蜜柚</view>
-					<view class="price1 font-36 font-w">29.9</view>
+					<view class="avoidOverflow pb-2">{{item.title}}</view>
+					<view class="price1 font-36 font-w">{{item.price}}</view>
 				</view>
 			</view>
 		</view>
@@ -27,16 +31,108 @@
 	export default {
 		data() {
 			return {
-				Router:this.$Router,
-				navCurr:0
+				Router: this.$Router,
+				mainData: [],
+				labelData:[],
+				curr:-1,
+				searchItem:{
+					thirdapp_id:2
+				},
+				idArray:[]
 			}
+		},
+		onLoad(options) {
+			const self = this;
+			if(options.id){
+				self.num = options.id
+			};
+			console
+			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
+			self.$Utils.loadAll(['getLabelData'], self);
+		},
+		onReachBottom() {
+			console.log('onReachBottom')
+			const self = this;
+			if (!self.isLoadAll && uni.getStorageSync('loadAllArray')) {
+				self.paginate.currentPage++;
+				self.getMainData()
+			};
 		},
 		methods: {
 			
-			changeNav(i){
+			change(num){
 				const self = this;
-				self.navCurr = i;
-			}
+				if(num!=self.curr){
+					self.curr = num;
+					if(self.curr==-1){
+						self.searchItem.category_id = ['in',self.idArray]
+					}else{
+						self.searchItem.category_id = self.labelData[self.curr].id
+					};
+					self.getMainData(true)
+				}
+			},
+			
+			getLabelData() {
+				const self = this;
+				const postData = {};
+				postData.searchItem = {
+					thirdapp_id: 2,
+					type:3
+				};
+				postData.order = {
+					listorder: 'desc'
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.labelData.push.apply(self.labelData, res.info.data);
+						for (var i = 0; i < self.labelData.length; i++) {
+							self.idArray.push(self.labelData[i].id)
+						};
+						if(self.num){
+							console.log(123)
+							for (var i = 0; i < self.labelData.length; i++) {
+								if(self.labelData[i].id==self.num){
+									self.curr = i;
+									self.searchItem.category_id = self.labelData[i].id
+								}
+							}
+						}else{
+							self.searchItem.category_id = ['in',self.idArray]
+						}
+						self.getMainData()
+					}
+					
+				};
+				self.$apis.labelGet(postData, callback);
+			},
+			
+			
+			getMainData(isNew) {
+				var self = this;
+				if (isNew) {
+					self.mainData = [];
+					self.paginate = {
+						count: 0,
+						currentPage: 1,
+						pagesize: 10,
+						is_page: true,
+					}
+				};
+				var postData = {};
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.searchItem = self.$Utils.cloneForm(self.searchItem)
+				postData.order = {
+					listorder: 'desc'
+				};
+				var callback = function(res) {
+					if (res.info.data.length > 0) {
+						self.mainData.push.apply(self.mainData, res.info.data);	
+					};
+					self.$Utils.finishFunc('getLabelData');
+				};
+				self.$apis.productGet(postData, callback);
+			},
 			
 		}
 	}
